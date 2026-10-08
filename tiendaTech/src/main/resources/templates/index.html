@@ -1,35 +1,12 @@
+
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>TechShop</title>
-        <meta charset="UTF-8"/>
-        <link href="/css/estilos.css" rel="stylesheet" type="text/css"/>
-    </head>
-
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos :: head}"/>
     <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
 
-        <header>
-            <nav>
-                <a class="logo" href="/">TechShop</a>
-
-                <div class="menu">
-                    <a href="/ejemplo2">Mis Autos</a>
-                    <a href="/multimedia">Multimedia</a>
-                    <a href="/iframes">iFrames</a>
-                </div>
-            </nav>
-        </header>
-
-        <aside>
-        </aside>
-
-        <section>
-            <h2>Esta es la tienda en línea del curso</h2>
-        </section>
-
-        <footer>
-            Todos los Derechos Reservados TechShop 2025 &COPY;
-        </footer>
-
+        <footer th:replace="~{general/fragmentos :: footer}"/>
     </body>
 </html>
