@@ -1,20 +1,187 @@
 
-<!-- 1 Fragmento con formulario unificado para agregar y modificar categoria -->
+<!-- Fragmento #1: Formulario para agregar y modificar categorías -->
 <section th:fragment="formulario">
+
+    <!-- Ventana para agregar o actualizar -->
+    <div class="modal fade" id="categoriaModal" tabindex="-1"
+         aria-labelledby="categoriaModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <form id="categoriaForm"
+                      th:action="@{/categoria/guardar}"
+                      method="post"
+                      enctype="multipart/form-data">
+
+                    <div class="modal-header bg-success text-white"
+                         id="categoriaModalHeader">
+                        <h5 class="modal-title" id="categoriaModalTitulo">
+                            Categoría
+                        </h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Cerrar"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <input type="hidden"
+                               name="idCategoria"
+                               id="categoriaId"/>
+
+                        <input type="hidden"
+                               name="rutaImagen"
+                               id="categoriaRutaImagen"/>
+
+                        <div class="mb-3">
+                            <label for="categoriaDescripcion"
+                                   class="form-label">
+                                Descripción
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="categoriaDescripcion"
+                                   name="descripcion"
+                                   maxlength="50"
+                                   required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="categoriaImagenFile"
+                                   class="form-label">
+                                Imagen
+                            </label>
+                            <input type="file"
+                                   class="form-control"
+                                   id="categoriaImagenFile"
+                                   name="imagenFile"
+                                   accept="image/*"/>
+
+                            <img id="categoriaPreview"
+                                 class="img-thumbnail mt-2 d-none"
+                                 alt="Vista previa"
+                                 style="max-height:120px;"/>
+                        </div>
+
+                        <!-- Permite enviar false si se desmarca Activa -->
+                        <input type="hidden"
+                               name="_activo"
+                               value="on"/>
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="categoriaActivo"
+                                   name="activo"
+                                   value="true"
+                                   checked/>
+
+                            <label class="form-check-label"
+                                   for="categoriaActivo">
+                                Activa
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-success">
+                            Guardar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventana de confirmación para eliminar -->
+    <div class="modal fade" id="confirmModal" tabindex="-1"
+         aria-labelledby="confirmModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmModalLabel">
+                        Eliminar categoría
+                    </h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    ¿Está seguro de que desea eliminar esta categoría?
+                    <p class="fw-bold" id="descripcionEliminar"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <form th:action="@{/categoria/eliminar}"
+                          method="post">
+
+                        <input type="hidden"
+                               name="idCategoria"
+                               id="idCategoriaEliminar"/>
+
+                        <button type="submit"
+                                class="btn btn-danger">
+                            Eliminar
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </section>
 
-<!-- fragmento 2 para el listado de categorias -->
+
+<!-- Fragmento #2: Listado de categorías -->
 <section th:fragment="listado" class="p-3">
+
     <div class="row p-3">
+
         <div class="col-md-9">
             <div class="card p-2">
-                <div class="card-header">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h4>[[#{categoria.listado}]]</h4>
+
+                    <button type="button"
+                            class="btn btn-success"
+                            data-bs-toggle="modal"
+                            data-bs-target="#categoriaModal"
+                            data-modo="agregar"
+                            data-titulo="Agregar categoría">
+                        <i class="fas fa-plus"></i>
+                        Agregar
+                    </button>
                 </div>
+
                 <div class="card-body">
+
                     <div th:if="${categorias != null and !categorias.empty}">
+
                         <table class="table table-striped table-hover">
+
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -24,25 +191,33 @@
                                     <th></th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 <tr th:each="c : ${categorias}">
+
                                     <td>[[${c.idCategoria}]]</td>
+
                                     <td>[[${c.descripcion}]]</td>
+
                                     <td>
                                         <img th:if="${c.rutaImagen != null}"
                                              th:src="${c.rutaImagen}"
-                                             alt="Imagen de categoria"
+                                             alt="Imagen de categoría"
                                              height="75"/>
                                     </td>
-                                    <td th:text="${c.activo} ? #{categoria.estado.activa} : #{categoria.estado.inactiva}"></td>
-                                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+
+                                    <td th:text="${c.activo} ? #{categoria.estado.activa} : #{categoria.estado.inactiva}">
+                                    </td>
+
+                                    <td>
+
                                         <button type="button"
                                                 class="btn btn-danger"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#confirmModal"
-                                                th:data-bs-id="${c.idCategoria}"
-                                                th:data-bs-descripcion="${c.descripcion}">
-                                            <i class="fa-solid fa-trash"></i>
+                                                th:attr="data-bs-id=${c.idCategoria},
+                                                         data-bs-descripcion=${c.descripcion}">
+                                            <i class="fas fa-trash"></i>
                                             [[#{accion.eliminar}]]
                                         </button>
 
@@ -51,17 +226,20 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#categoriaModal"
                                                 data-modo="editar"
-                                                th:data-titulo="#{accion.actualizar}"
-                                                th:data-id="${c.idCategoria}"
-                                                th:data-descripcion="${c.descripcion}"
-                                                th:data-activo="${c.activo}"
-                                                th:data-imagen="${c.rutaImagen != null ? c.rutaImagen : ''}">
+                                                data-titulo="Actualizar categoría"
+                                                th:attr="data-id=${c.idCategoria},
+                                                         data-descripcion=${c.descripcion},
+                                                         data-activo=${c.activo},
+                                                         data-imagen=${c.rutaImagen != null ? c.rutaImagen : ''}">
                                             <i class="fas fa-pencil-alt"></i>
                                             [[#{accion.actualizar}]]
                                         </button>
+
                                     </td>
+
                                 </tr>
                             </tbody>
+
                         </table>
                     </div>
 
@@ -69,21 +247,27 @@
                          th:if="${categorias == null or categorias.empty}">
                         <span>[[#{lista.vacia}]]</span>
                     </div>
+
                 </div>
             </div>
         </div>
 
         <div class="col-md-3">
             <div class="card text-center bg-success text-white mb-3">
+
                 <div class="card-body">
+
                     <h3>[[#{categoria.total}]]</h3>
+
                     <h4 class="fs-2">
                         <i class="fas fa-layer-group"></i>
                         [[${totalCategorias}]]
                     </h4>
+
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
+    </div>
+
+</section>

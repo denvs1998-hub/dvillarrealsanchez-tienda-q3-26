@@ -32,4 +32,18 @@ public class Categoria implements Serializable {
 
     @Column(nullable = false)
     private boolean activo = true;
+
+    // Metodos explicitos para que NetBeans los reconozca
+
+    public Integer getIdCategoria() {
+        return idCategoria;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
 }
