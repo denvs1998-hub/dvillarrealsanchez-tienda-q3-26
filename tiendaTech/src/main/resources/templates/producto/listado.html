@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+
+        <!-- Encabezado y menú principal -->
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <!-- Formulario para agregar y actualizar productos -->
+        <section th:replace="~{producto/fragmentos :: formulario}"></section>
+
+        <!-- Tabla de productos -->
+        <section th:replace="~{producto/fragmentos :: listado}"></section>
+
+        <!-- Ventana de confirmación para eliminar productos -->
+        <section th:replace="~{general/fragmentos :: confirmarEliminar(@{/producto/eliminar},'idProducto')}"></section>
+
+        <!-- Notificaciones de éxito y error -->
+        <section th:replace="~{general/fragmentos :: mostrarToast}"></section>
+
+        <!-- JavaScript de confirmación de eliminación -->
+        <div th:replace="~{general/fragmentos :: scriptConfirmarEliminar}"></div>
+
+        <!-- Pie de página -->
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+
+        <!-- JavaScript del módulo Producto -->
+        <script th:src="@{/js/modulos/producto.js}"></script>
+
+    </body>
+</html>

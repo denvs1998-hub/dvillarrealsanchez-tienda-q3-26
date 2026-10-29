@@ -1,5 +1,4 @@
-
- // funcion para hacer un preview de una imagen
+// funcion para hacer un preview de una imagen
 function mostrarImagen(input, previewId = 'blah') {
     if (input.files && input.files[0]) {
         const imagen = input.files[0];
