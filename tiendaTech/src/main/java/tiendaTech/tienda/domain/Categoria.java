@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 import lombok.*;
 
 @Getter
@@ -33,6 +34,10 @@ public class Categoria implements Serializable {
     @Column(nullable = false)
     private boolean activo = true;
 
+    // Relacion de una categoria con muchos productos
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+    private List<Producto> productos;
+
     // Metodos explicitos para que NetBeans los reconozca
 
     public Integer getIdCategoria() {
@@ -45,5 +50,9 @@ public class Categoria implements Serializable {
 
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
     }
 }

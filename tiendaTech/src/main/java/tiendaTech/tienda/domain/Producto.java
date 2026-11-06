@@ -1,3 +1,4 @@
+
 package tiendaTech.tienda.domain;
 
 import jakarta.persistence.*;
@@ -20,7 +21,10 @@ public class Producto implements Serializable {
     @Column(name = "id_producto")
     private Integer idProducto;
 
-    private Integer idCategoria;
+    // Relacion de muchos productos con una categoria
+    @ManyToOne
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
 
     @Column(nullable = false, length = 50)
     @NotBlank(message = "La descripción no puede estar vacía.")

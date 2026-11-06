@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <main class="container mt-4 mb-5">
+
+            <h2 class="text-center mb-4">
+                Práctica #2 - Consulta ampliada de productos
+            </h2>
+
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    Consulta por precio y categoría
+                </div>
+
+                <div class="card-body">
+                    <form th:action="@{/consultas/consultaAmpliada}"
+                          method="post">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    Precio inferior
+                                </label>
+                                <input type="number"
+                                       name="precioInf"
+                                       class="form-control"
+                                       min="0"
+                                       step="0.01"
+                                       th:value="${precioInf != null ? precioInf : 20000}"
+                                       required />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    Precio superior
+                                </label>
+                                <input type="number"
+                                       name="precioSup"
+                                       class="form-control"
+                                       min="0"
+                                       step="0.01"
+                                       th:value="${precioSup != null ? precioSup : 30000}"
+                                       required />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    Categoría
+                                </label>
+
+                                <select name="idCategoria"
+                                        class="form-select">
+
+                                    <option value="">
+                                        Todas las categorías
+                                    </option>
+
+                                    <option th:each="c : ${categorias}"
+                                            th:value="${c.idCategoria}"
+                                            th:text="${c.descripcion}"
+                                            th:selected="${idCategoria != null and idCategoria == c.idCategoria}">
+                                    </option>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-success mt-3">
+                            Consultar productos
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+
+            <h4 class="mb-3">Resultados de la consulta</h4>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Existencias</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="p : ${productos}">
+
+                            <td th:text="${p.idProducto}"></td>
+
+                            <td th:text="${p.descripcion}"></td>
+
+                            <td th:text="${p.categoria.descripcion}"></td>
+
+                            <td th:text="${#numbers.formatCurrency(p.precio)}"></td>
+
+                            <td th:text="${p.existencias}"></td>
+
+                            <td th:text="${p.activo ? 'Activo' : 'Inactivo'}"></td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(productos)}">
+                            <td colspan="6" class="text-center">
+                                No se encontraron productos.
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    </body>
+</html>
